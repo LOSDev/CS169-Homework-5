@@ -4,3 +4,10 @@
   <%= render :partial => "form" %>
 
 <% end %>
+
+
+<%= form_tag(:action=>'merge', :id => @article.id) do %>
+  <%= label_tag(:merge_article_id, "Article ID:") %>
+  <%= text_field_tag(:merge_article_id) %>
+  <%= submit_tag("Merge") %>
+<% end %>

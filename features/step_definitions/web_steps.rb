@@ -41,7 +41,38 @@ Given /^the blog is set up$/ do
                 :profile_id => 1,
                 :name => 'admin',
                 :state => 'active'})
+  User.create!({:login => 'publisher',
+                :password => 'aaaaaaaa',
+                :email => 'jim@snow.com',
+                :profile_id => 2,
+                :name => 'publisher',
+                :state => 'active'})
+  Article.create!(:allow_comments => true,
+                :allow_pings => true,
+                :author => "Mr Typo",
+                :body => "This is your second article.",
+
+                :guid => "2bf4e3ca-ed7b-4562-8a4a-8ce843882222",
+                :id => 2,
+                :permalink => "bye-world",
+                :post_type => "read",
+                :published => true,
+                :published_at => "2012-06-09 22:51:55 UTC",
+                :settings => {"password"=>""},
+                :state => "published",
+                :text_filter_id => 5,
+                :title => "Bye World!",
+                :type => "Article",
+                :user_id => 1)
+  Comment.create(type: "Comment", title: nil, author: "ich", body: "The new Comment", excerpt: nil, user_id: 1, guid: "gp624a0e-1d8e-4602-9f04-b857d6789aa4", text_filter_id: nil, whiteboard: nil, article_id: 1, email: "df@sdhg.de", url: "", ip: "127.0.0.1", blog_name: nil, published: true, published_at: nil, state: "ham", status_confirmed: true)
+  Comment.create(type: "Comment", title: nil, author: "ich", body: "The new Comment", excerpt: nil, user_id: 1, guid: "gd624a0e-1d8e-4602-9f04-b857d6789aa4", text_filter_id: nil, whiteboard: nil, article_id: 1, email: "df@sdhg.de", url: "", ip: "127.0.0.1", blog_name: nil, published: true, published_at: nil, state: "ham", status_confirmed: true)
+  Comment.create(type: "Comment", title: nil, author: "ich", body: "The new Comment", excerpt: nil, user_id: 1, guid: "gj624a0e-1d8e-4602-9f04-b857d6789aa4", text_filter_id: nil, whiteboard: nil, article_id: 2, email: "df@sdhg.de", url: "", ip: "127.0.0.1", blog_name: nil, published: true, published_at: nil, state: "ham", status_confirmed: true)
+
+   
 end
+
+
+
 
 And /^I am logged into the admin panel$/ do
   visit '/accounts/login'
@@ -54,6 +85,25 @@ And /^I am logged into the admin panel$/ do
     assert page.has_content?('Login successful')
   end
 end
+
+Then /^article (\d+) should have (\d+) comments$/ do |arg1, arg2|
+  Article.find(arg1).published_comments.count.should == 3
+  #expect{Article.find(arg1).published_comments.count}.to change{Article.find(arg1).published_comments.count}.by(1)
+end
+
+
+When /^I visit the edit article (\d+) page$/ do |arg1|
+  visit '/admin/content/edit/1'
+end
+
+Then /^the page should contain "(.*?)"$/ do |arg1|
+  page.find('#article_title')['value'].should == arg1
+end
+
+Given /^I am not logged in$/ do
+  visit '/accounts/logout'
+end
+
 
 # Single-line step scoper
 When /^(.*) within (.*[^:])$/ do |step, parent|

@@ -20,7 +20,7 @@ dbfile = File.expand_path("../config/database.yml", __FILE__)
 #end
 
 group :production do
-  gem 'pg'
+  #gem 'pg'
 end
 
 source 'https://rubygems.org'
@@ -46,12 +46,16 @@ gem 'acts_as_tree_rails3'
 gem 'recaptcha', :require => 'recaptcha/rails', :branch => 'rails3'
 
 group :development, :test do
-  gem 'ruby-debug19'
+  gem 'debugger'
   gem 'factory_girl', '~> 2.2'
   gem 'webrat'
   gem 'rspec-rails', '~> 2.0'
   gem 'simplecov', :require => false
   gem 'sqlite3'
+  
+end
+
+group :test do
   gem 'cucumber'
   gem 'cucumber-rails', :require => false
   gem 'cucumber-rails-training-wheels'
